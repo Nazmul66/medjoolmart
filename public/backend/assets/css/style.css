@@ -1,0 +1,487 @@
+.file_div{
+    display: block;
+    padding: 35px;
+    border-radius: 4px;
+    border: 2px dashed rgba(56, 78, 183, 0.30);
+    background: #F8F8FF;
+    cursor: pointer;
+}
+.file_div h2{
+    color: #0F0F0F;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 500;
+}
+.file_div .img_upload{
+    display: block;
+    margin: 0 auto 25px;
+}
+.file_div h3{
+    color: #0F0F0F;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    cursor: pointer;
+}
+.file_div h3 span{
+    color: #483EA8;
+    text-decoration-line: underline;
+    margin-bottom: 10px;
+}
+.file_div p{
+    color: #676767;
+    text-align: center;
+    font-size: 12px;
+    line-height: 18px;
+}
+.file_name{
+   text-align: center;
+   border: 2px dashed rgba(56, 78, 183, 0.30);
+   padding: 10px 0px;
+}
+.preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.preview-container .preview {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.cards{
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+    border-top: 5px solid #5156be !important;
+    border-radius: 6px;
+}
+.header_navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.product_image a img{
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    width: 350px;
+    height: auto;
+}
+.product_qrcode span{
+    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.circle_rounded{
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+}
+.multi_description{
+
+}
+.auth-content{
+    padding: 40px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 0px 0px 56px rgba(0, 38, 3, 0.08);
+    --webkit-box-shadow: 0px 0px 56px rgba(0,38,3,0.08);
+    border-radius: 6px;
+    --webkit-border-radius: 6px;
+}
+
+@media (min-width: 320px) and (max-width: 576px){
+    .auth-content{
+        padding: 30px 15px;
+    }
+    .header_navbar{
+        flex-direction: column;
+        align-items: end;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px){
+    .auth-content{
+        padding: 30px;
+    }
+}
+
+.images_container{
+    position: relative;
+    width: 170px;
+    height: 145px;
+}
+.images_container img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.images_container .x-image{
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    font-size: 20px;
+    color: #4e1aff;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+
+
+
+/* yajra datatables pagination design */
+
+label:not(.form-check-label):not(.custom-file-label) {
+    text-transform: capitalize;
+}
+div.dt-container select.dt-input {
+    border: 2px solid #dee2e6 !important;
+    outline: none;
+    margin-right: 12px;
+    cursor: pointer;
+}
+div.dt-container .dt-search input {
+    border: 2px solid #dee2e6 !important;
+    border-radius: 4px !important;
+    margin-left: 16px !important;
+    outline: none !important;
+    caret-color: darkblue;
+}
+.dt-container .dt-paging .dt-paging-button {
+    border-radius: 10px !important;
+    border: 2px solid #f1f1f1 !important;
+    font-weight: 700;
+    cursor: pointer !important;
+}
+
+body div.dt-container .dt-paging .dt-paging-button.current,
+body div.dt-container .dt-paging .dt-paging-button.current:hover{
+    color: #fff !important;
+    background: #5156be !important; 
+    cursor: pointer !important;
+}
+div.dt-container .dt-paging .dt-paging-button:active{
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+}
+.dt-container .dt-paging .dt-paging-button:hover{
+    background: #5156be !important;
+    cursor: pointer !important; 
+}
+ div.dt-container .dt-paging .dt-paging-button.disabled
+{
+    color: #000 !important;
+    cursor: pointer !important;
+}
+body div.dt-container .dt-paging .dt-paging-button.disabled:hover, 
+body div.dt-container .dt-paging .dt-paging-button.disabled:active{
+    color: #FFF !important;
+    cursor: pointer !important;
+}
+button:focus {
+    outline: 1px dotted;
+    outline: none !important;
+    cursor: pointer !important;
+}
+table.dataTable td.dt-type-numeric,
+table.dataTable th.dt-type-numeric{
+    text-align: left !important;
+}
+
+
+/* Bootstrap CSS */
+.btn-close{
+    border: none !important;
+    background: transparent !important;
+    color: #FFF !important;
+    font-size: 20px !important;
+}
+.view_modal_content{
+    display: flex;
+    border-bottom: 1px solid #d1d1d1;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+}
+.message_content{
+    display: flex;
+    border-bottom: 1px solid #d1d1d1;
+    margin-bottom: 20px;
+    padding-bottom: 16px;   
+}
+.message_content label{
+    width: 50%;
+    margin: 0;
+}
+.view_modal_content label{
+    width: 50%;
+    margin: 0;
+}
+.message_content span,
+.message_content a{
+    width: 50%;
+}
+.view_modal_content span,
+.view_modal_content a{
+    width: 50%;
+}
+.modal-footer {
+    padding: 0 .75rem .75rem .75rem !important;
+    border-top: none;
+}
+.modal-content {
+    border: none !important;
+}
+.modal-title{
+    color: #FFF !important;
+}
+
+
+@media ( min-width: 320px ) and ( max-width: 576px ){
+    .message_content {
+        flex-direction: column;
+    }
+    .message_content label{
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    .view_modal_content label{
+        width: 20%;
+        font-size: 14px;
+    }
+    .view_modal_content span,
+    .view_modal_content a{
+        font-size: 14px;
+        width: 80%;
+    }
+    .message_content span,
+    .message_content a{
+        width: 100%;
+    }
+
+
+    div.dt-container div.dt-layout-row:not(.dt-layout-table) {
+        display: flex !important;
+    }
+    div.dt-container select.dt-input {
+        font-size: 13px;
+    }
+    label:not(.form-check-label):not(.custom-file-label) {
+        font-size: 13px;
+        /* display: none; */
+    }
+    div.dt-container .dt-search input {
+        margin-left: 8px !important;
+        padding: 8px !important;
+    }
+    div.dt-container select.dt-input {
+        padding: 8px !important;
+    }
+    table.dataTable thead > tr > th{
+        white-space: nowrap;
+    }
+    table.dataTable > tbody > tr {
+        white-space: nowrap;
+    }
+    div.dt-container div.dt-layout-row div.dt-layout-cell {
+        overflow-x: scroll;
+    }
+    div.dt-container div.dt-layout-row:not(.dt-layout-table) div.dt-layout-cell > * {
+        font-size: 12px;
+    }
+    div.dt-container .dt-paging .dt-paging-button.disabled {
+        font-size: 12px;
+    }
+    body div.dt-container .dt-paging .dt-paging-button.current, body div.dt-container .dt-paging .dt-paging-button.current:hover {
+        font-size: 12px;
+    }
+    .dt-length label,
+    .dt-search label{
+        display: none !important;
+    }
+    .breadcrumb {
+        padding: .40rem 1rem !important;
+        margin-bottom: 0;
+    }
+}
+
+ .cache_rotate{
+    transform: rotate(360deg);
+    transition: all 0.4s ease-in-out;
+}
+ .cache_rotate:hover{
+    transform: rotate(0deg);
+}
+
+.image_bg{
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+}
+.image_bg i{
+    position: absolute;
+    bottom: 7px;
+    right: 7px;
+    font-size: 16px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    cursor: pointer;
+    background: #4549a2;
+    border-radius: 50px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
+}
+select > option:disabled{
+    color: #495057;
+    background-color: #e9e9ef;
+}
+.main_search_product{
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.search_product{
+    position: relative;
+    width: 100%;
+}
+.search_product i{
+   position: absolute;
+   color: rgba(97, 97, 97, 1);
+   font-size: 20px;
+   top: 50%;
+   left: 14px;
+   transform: translateY(-50%);
+}
+.search_product_btn{
+    padding: 4px 14px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    line-height: 30px;
+    background: #FFF;
+    color: rgba(48, 48, 48, 1);
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.55);
+}
+.search_product_btn:focus{
+    box-shadow: 0px -1px 3px rgba(0, 0, 0, 0.55);
+}
+.modal_body_height{
+    height: 350px;
+    overflow-y: scroll;
+}
+.search_product_show{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+.search_product_show h5{
+    margin: 0;
+    font-size: 14px;
+}
+.analytics_card{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.icon_design{
+    width: 80px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: rgba(81, 86, 190); */
+    color: #FFF;
+    border-radius: 4px;
+}
+.icon_design i{
+    font-size: 28px;
+}
+.icon_design span{
+    font-size: 28px;
+}
+.cart_text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.cart_text p{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-info.card-outline {
+    border-top: 3px solid #17a2b8;
+}
+.card_shadow {
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.2);
+}
+.profile-user-img {
+    border: 3px solid #adb5bd;
+    margin: 0 auto;
+    padding: 3px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.list-group-item {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+/* .fa-eye::before {
+    content: "\f06e";
+} */
+
+
+
+
+
+
