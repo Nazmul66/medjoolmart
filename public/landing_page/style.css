@@ -1,0 +1,393 @@
+a{
+    text-decoration: none;
+}
+h1,h2,h3,h4,h5,h6,p,blockquote{
+    margin: 0;
+}
+ul{
+    padding: 0;
+    margin: 0;
+}
+ul li{
+    list-style: none;
+}
+
+/**********************************
+           Beauty Product Css
+***********************************/
+ .section-padding {
+    padding: 60px 0;
+  }
+  .btn-custom {
+    background-color: #0b735c;
+    color: white;
+  }
+  .header_part{
+    
+  }
+  .header_part img{
+      width: 160px !important;
+      border-radius: 50%;
+  }
+  .header_part h2{
+      font-size: 50px;
+      font-weight: 700;
+      line-height: 45px;
+      letter-spacing: 5px;
+      word-spacing: 0px;
+      color: #0D3E40;
+  }
+  .header_part p{
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 45px;
+      color: #0D3E40;
+      width: 48%;
+      margin: 0 auto 20px;
+  }
+  .btn_custom{
+      display: inline-block;
+      background-color: #0D3E40;
+      font-size: 22px;
+      font-weight: 600;
+      fill: #FED9A8;
+      color: #FED9A8;
+      border-radius: 5px 5px 5px 5px;
+      padding: 10px 30px;
+      margin: 0 auto 40px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+   }
+   .btn_custom:hover {
+      animation: zoomOnce 0.5s ease forwards;
+    }
+    @keyframes zoomOnce {
+      0% {
+        transform: scale(1);
+      }
+      50%{
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  
+   .btn_custom svg{
+      width: 20px !important;
+   }
+  .card_products{
+     display: grid;
+     grid-template-columns: repeat(2, 1fr);
+     gap: 20px;
+  }
+  .card_products .card_rows{
+    border-radius: 10px 10px 10px 10px;
+    border-style: solid;
+    border-width: 2px 2px 2px 2px;
+    border-color: #61CE70;
+    margin: 0px 20px 0px 0px;
+    --e-column-margin-right: 20px;
+    --e-column-margin-left: 0px;
+    padding: 20px 20px 20px 20px;
+  }
+  .card_products .card_rows img{
+    width: 100%;
+    border-radius: 10px 10px 10px 10px;
+  }
+  .card_products .card_rows h5{
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 25px;
+    color: #0D3E40;
+  }
+
+  .benefits_use_section{
+
+  }
+  .benefits_use_measurement{
+    background-color: #FDFCDC;
+    border-radius: 10px 10px 10px 10px;
+    border-style: solid;
+    border-width: 2px 2px 2px 2px;
+    border-color: #61CE70;
+    transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
+    padding: 50px 35px;
+  }
+  .benefits_use_measurement h3{
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 45px;
+    color: #0D3E40;
+  }
+  .benefit_products{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .benefit_products .benefit_product_script{
+    border-radius: 15px 15px 15px 15px;
+    border-style: solid;
+    border-width: 3px 3px 3px 3px;
+    border-color: #076625;
+    margin: 0px 20px 0px 0px;
+    --e-column-margin-right: 20px;
+    --e-column-margin-left: 0px;
+    padding: 6px 6px 6px 6px;
+  }
+  .benefit_products .benefit_product_script h4{
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    color: #076625;
+    text-align: center;
+  }
+  .benefit_products .benefit_product_script ul{
+     padding: 0;
+     margin: 0;
+     list-style: none;
+  }
+  .benefit_products .benefit_product_script ul li{
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+    margin: 18px 0;
+  }
+  .benefit_products .benefit_product_script ul li::before{
+    content: "\2713";
+    background: green;
+    color: #FFF;
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50px;
+  }
+
+  .youtube_section{
+    padding: 5rem 0;
+  }
+  .youtube_section h4{
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 45px;
+    color: #0D3E40;
+    text-align: center;
+  }
+  iframe{
+    width: 100%;
+    height: 450px;
+  }
+
+  .customer_communicate_section{
+
+  }
+  .communicate_details{
+    background-color: #FDFCDC;
+    border-radius: 10px 10px 10px 10px;
+    border-style: solid;
+    border-width: 2px 2px 2px 2px;
+    border-color: #61CE70;
+    transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
+    padding: 50px 20px 50px 20px;
+    text-align: center;
+  }
+  .communicate_details p{
+    font-size: 35px;
+    font-weight: 700;
+    line-height: 45px;
+    color: #0D3E40;
+  }
+  .checkout_form_section {
+
+  }
+  .checkout_form_section h4{
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 45px;
+    color: #045726;
+  }
+  .checkout_form{
+    padding: 20px 20px 20px 20px;
+    border-style: solid;
+    border-width: 30px 5px 5px 5px;
+    border-color: #0D3E40;
+    border-radius: 40px 40px 0px 0px;
+  }
+  
+  .product_single_list{
+    display: flex;
+    gap: 10px;
+    border: 1px solid rgb(176, 176, 176);
+    padding: 20px 30px;
+    margin: 0px 10px 22px;
+    border-radius: 0.35em;
+    background-color: rgb(247, 247, 247);
+  }
+
+  .product_select_list{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .product_single_list img{
+    width: 50px;
+  }
+  .product-title-qty {
+
+  }
+  .product-title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .wrap_quantity{
+    display: flex;
+    align-items: center
+  }
+  .quantity {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    overflow: hidden;
+    width: 100px;
+  }
+  .quantity button {
+    background-color: #eee;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .quantity input {
+    width: 40px;
+    text-align: center;
+    border: none;
+  }
+  .product-price{
+    margin-left: 12px;
+    color: #000;
+    font-weight: 600;
+  }
+
+  .billing_address{
+
+  }
+  .order_details{
+
+  }
+  .billing_address h3,
+  .order_details h3{
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom:25px;
+    padding: 0;
+    color: #333;
+  }
+
+  .shop_table{
+    width: 100%;
+  }
+  .shop_table thead tr,
+  .shop_table tbody tr{
+    border-bottom: 1px dashed #CCCCCC;
+  }
+  .shop_table thead tr th.product-name,
+  .shop_table tbody tr td.product-name{
+    width: 70%;
+    padding-right: 0 !important;
+    color: #404040;
+    padding: 10px;
+  }
+  .shop_table thead tr th.product-total,
+  .shop_table tbody tr td.product-total{
+    width: 30%;
+    padding-right: 0 !important;
+    color: #404040;
+    padding: 10px;
+  }
+
+  .payment_process {
+      background: #F7F7F7;
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top: 40px;
+    }
+
+    .payment_process ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .payment_process li {
+      margin-bottom: 15px;
+    }
+
+    .payment_process input[type="radio"] {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .desc-box {
+      background-color: #EAEAEA;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 10px;
+      display: none;
+      position: relative;
+    }
+    .desc-box::before {
+      position: absolute;
+      content: "";
+      top: -8px;
+      left: 10%;
+      width: 20px;
+      height: 20px;
+      background: #EAEAEA;
+      transform: rotateZ(45deg);
+    }
+
+    .desc-box.active {
+      display: block;
+    }
+
+    .payment-logo {
+      height: 24px;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+
+    .place-order {
+      display: block;
+      width: 100%;
+      background-color: #004d40;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .place-order:hover {
+      background-color: #00695c;
+    }
+
+    .privacy-note {
+      font-size: 12px;
+      font-weight: 600;
+      color: #000;
+      margin: 15px 0;
+    }
+
+  footer {
+    background-color: #0b735c;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+  }

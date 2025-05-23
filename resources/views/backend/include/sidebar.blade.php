@@ -322,6 +322,30 @@
                 </li>
                 @endif
 
+
+                {{-- Landing Page --}}
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class='bx bx-grid-alt'></i>
+                        <span>Landing Page</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li class="">
+                            <a href="javascript: void(0);" class="has-arrow" data-key="t-level-1-2" aria-expanded="false">Beauty Page</a>
+                            <ul class="sub-menu mm-collapse" aria-expanded="true" style="height: 0px;">
+                                <li>
+                                    <a href="{{ route('admin.serum.index') }}" data-key="t-level-2-1">Serum Product</a>
+                                </li>
+
+                                <li>
+                                    <a href="javascript: void(0);" data-key="t-level-2-2">Level 2.2</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+
                 {{-- Setting Website --}}
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
@@ -336,6 +360,12 @@
                                 </a>
                             </li>
                         @endif
+
+                        <li>
+                            <a href="{{ route('admin.profiles') }}">
+                                <span>Profile Update</span>
+                            </a>
+                        </li>
 
                         <li>
                             <a href="{{ route('admin.profiles') }}">

@@ -8,6 +8,7 @@
 |
 */
 
+use App\Http\Controllers\Admin\BeautyLandingPageController;
 use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\QRCodeController;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,7 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\SubscriptionController;
 use App\Http\Controllers\Backend\HomeSettingController;
 use App\Http\Controllers\Backend\EssentialSettingController;
+use App\Http\Controllers\Backend\LandingPageController;
 use App\Http\Controllers\Backend\Hrms\ExpenseController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -273,6 +275,11 @@ Route::middleware('setLanguage')->group(function(){
         Route::get('/qrcode/view/{id}', [QRCodeController::class, 'qrcodeView'])->name('qrcode.view');
 
 
+        //______ Landing Page _____//
+        Route::controller(BeautyLandingPageController::class)->group(function () {
+            // Beauty Products
+            Route::get('/serum-product', 'serum_index')->name('serum.index');
+        });  
             
         /****************************
         *      All HRMS Modules

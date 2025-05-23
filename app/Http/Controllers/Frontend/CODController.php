@@ -8,6 +8,7 @@ use App\Http\Requests\Frontend\CheckoutRequest;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\ProductSize;
 use App\Models\Transaction;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
@@ -90,6 +91,20 @@ class CODController extends Controller
                 $orderProduct->qty            = $item->qty;
                 $orderProduct->units          = $product->units;
                 $orderProduct->save();
+
+
+                // Reduce Product quantity or stock
+                $productSize = ProductSize::where('product_id', $item->id)->first();
+
+                if ($productSize) {
+                    // If stock exists for that size, decrease it
+                    $productSize->stock -= $item->qty;
+                    $productSize->save();
+                } else {
+                    // If size_id given but not found, fallback: reduce main product qty
+                    $product->qty -= $item->qty;
+                    $product->save();
+                }
             }
 
             //__ store transaction details __//
@@ -99,6 +114,7 @@ class CODController extends Controller
             $transaction->payment_method      = $request->input('payment-method');
             $transaction->amount              = getMainCartTotal();
             $transaction->save();
+
 
             // Steadfast Courier APi Work
             // $orderData = [
