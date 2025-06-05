@@ -10,9 +10,9 @@ class BeautyLandingPageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function serum_index()
+    public function serum_demo()
     {
-        return view('landing_page.pages.beauty_item.serum_product.index');
+        return view('landing_page.pages.beauty_item.serum_product.demo');
     }
 
     /**

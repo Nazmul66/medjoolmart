@@ -272,14 +272,7 @@ Route::middleware('setLanguage')->group(function(){
         Route::resource('/qrcode', QRCodeController::class)->names('qrcode');
         Route::get('/qrcode-data', [QRCodeController::class, 'getData'])->name('qrcode-data');
         Route::post('/qrcode/status', [QRCodeController::class, 'changeQrcodeStatus'])->name('qrcode.status');
-        Route::get('/qrcode/view/{id}', [QRCodeController::class, 'qrcodeView'])->name('qrcode.view');
-
-
-        //______ Landing Page _____//
-        Route::controller(BeautyLandingPageController::class)->group(function () {
-            // Beauty Products
-            Route::get('/serum-product', 'serum_index')->name('serum.index');
-        });  
+        Route::get('/qrcode/view/{id}', [QRCodeController::class, 'qrcodeView'])->name('qrcode.view'); 
             
         /****************************
         *      All HRMS Modules
@@ -294,8 +287,6 @@ Route::middleware('setLanguage')->group(function(){
 
 
             //______ Payroll _____//
-
-
             Route::get('/multi', function (){
                 return view('backend.pages.hrms.multi.index');
             })->name('multi');
@@ -304,6 +295,13 @@ Route::middleware('setLanguage')->group(function(){
                 return view('backend.pages.elementor.index');
             })->name('elementor');
         });
+
+
+        //______ Landing Page _____//
+        Route::controller(BeautyLandingPageController::class)->group(function () {
+            // Beauty Products
+            Route::get('/serum-product', 'serum_demo')->name('serum.demo');
+        }); 
 
     });
 
