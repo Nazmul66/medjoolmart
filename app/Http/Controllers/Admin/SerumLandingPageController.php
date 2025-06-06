@@ -208,10 +208,11 @@ class SerumLandingPageController extends Controller
     {
         // dd($slug);
         $landingPage = SerumLandingPage::where('slug', $slug)->first();
+        $serumReviewImages = SerumReviewImage::where('serum_lp_id', $landingPage->id)->get();
         if( $landingPage->status == 0 ){
             abort(404);
         }
-        return view('landing_page.pages.beauty_item.serum_product.view', compact('landingPage'));
+        return view('landing_page.pages.beauty_item.serum_product.view', compact('landingPage', 'serumReviewImages'));
     }
 
     /**
@@ -313,7 +314,6 @@ class SerumLandingPageController extends Controller
 
         // dd($serumReviewImages);
         if ($serumReviewImages->isNotEmpty()) {
-            // dd('has');
             foreach ($serumReviewImages as $row) {
                 if ($row->images && file_exists($row->images)) {
                     unlink($row->images);
