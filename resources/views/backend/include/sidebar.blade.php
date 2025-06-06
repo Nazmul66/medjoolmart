@@ -334,7 +334,7 @@
                             <a href="javascript: void(0);" class="has-arrow" data-key="t-level-1-2" aria-expanded="false">Beauty Page</a>
                             <ul class="sub-menu mm-collapse" aria-expanded="true" style="height: 0px;">
                                 <li>
-                                    <a href="{{ route('admin.serum.demo') }}" data-key="t-level-2-1">Serum Product</a>
+                                    <a href="{{ route('admin.serum.index') }}" data-key="t-level-2-1">Serum Product</a>
                                 </li>
 
                                 <li>

@@ -573,7 +573,10 @@ ul li{
       margin: 0px 0px 16px;
     }
 
-
+    .owl-carousel .owl-item img {
+      height: 450px;
+      object-fit: scale-down;
+    }
     #testimonial button.owl-next{
         top: 50%;
         right: -4px;
@@ -589,6 +592,88 @@ ul li{
 }
 
 @media ( min-width: 577px ) and ( max-width: 768px ) {
+    .header_part img {
+      width: 110px !important;
+      border-radius: 50%;
+    }
+    .header_part h2 {
+      font-size: 28px;
+      line-height: 30px;
+    }
+    .header_part p {
+      font-size: 21px;
+      line-height: 30px;
+      width: 100%;
+      margin: 0 0 20px;
+    }
+    .card_products {
+      grid-template-columns: repeat(1, 1fr);
+      gap: 30px;
+    }
+    .benefits_use_section {
+      padding: 0 16px;
+    }
+    .benefits_use_measurement {
+      padding: 20px;
+    }
+    .benefits_use_measurement h3 {
+      font-size: 28px;
+      line-height: 2.2rem;
+    }
+    .benefit_products {
+      grid-template-columns: repeat(1, 1fr);
+      gap: 30px;
+    }
+    .benefit_products .benefit_product_script {
+      margin: 0;
+      padding: 14px;
+    }
+    .benefit_products .benefit_product_script ul li {
+      font-size: 16px;
+      margin: 12px 0;
+    }
+    .benefit_products .benefit_product_script ul li::before {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+    }
+    .youtube_section{
+      padding: 45px 15px 0;
+    }
+    .youtube_section h4 {
+      font-size: 27px;
+      line-height: 30px;
+    }
+    .communicate_section{
+      padding: 0 15px;
+    }
+    .communicate_details {
+      padding: 40px 20px 40px 20px;
+    }
+    .communicate_details p {
+      font-size: 25px;
+      line-height: 35px;
+    }
+    .btn_custom {
+      margin: 0 auto 28px;
+    }
+    .customer_section h4 {
+      font-size: 30px;
+      line-height: 40px;
+    }
+    .checkout_form_section h4 {
+      font-size: 30px;
+      line-height: 36px;
+    }
+    .product_single_list {
+      padding: 20px 15px;
+      margin: 0px 0px 16px;
+    }
+
+    .owl-carousel .owl-item img {
+      height: 450px;
+      object-fit: scale-down;
+    }
     #testimonial button.owl-next{
         top: 50%;
         right: -4px;
@@ -604,6 +689,23 @@ ul li{
 }
 
 @media ( min-width: 769px ) and ( max-width: 992px ) {
+    .header_part p {
+      width: 70%;
+    }
+    .benefit_products .benefit_product_script {
+      margin: 0;
+      padding: 14px;
+    }
+    .benefit_products .benefit_product_script ul li {
+      font-size: 16px;
+      margin: 12px 0;
+    }
+    .benefit_products .benefit_product_script ul li::before {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+    }
+
     #testimonial button.owl-next{
         top: 50%;
         right: -20px;

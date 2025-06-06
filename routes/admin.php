@@ -8,9 +8,9 @@
 |
 */
 
-use App\Http\Controllers\Admin\BeautyLandingPageController;
 use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\QRCodeController;
+use App\Http\Controllers\Admin\SerumLandingPageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Backend\PermissionController;
@@ -298,12 +298,19 @@ Route::middleware('setLanguage')->group(function(){
 
 
         //______ Landing Page _____//
-        Route::controller(BeautyLandingPageController::class)->group(function () {
             // Beauty Products
-            Route::get('/serum-product', 'serum_demo')->name('serum.demo');
-        }); 
+        Route::resource('/serum-product', SerumLandingPageController::class)->names('serum');
+        Route::get('/serum-data', [SerumLandingPageController::class, 'getData'])->name('serum-data');
+        Route::post('/change-serum-status', [SerumLandingPageController::class, 'changeSerumStatus'])->name('serum.status');
+        Route::get('/reviewSerum-image-delete/{id}', [SerumLandingPageController::class, 'delete_review_serum_image'])->name('review-serum-image.delete'); 
 
+        Route::get('/serum-demo', [SerumLandingPageController::class, 'serum_demo'])->name('serum.demo');
     });
+
+
+
+    //_____ Out Of Admin ( Landing Page ) _____//
+    Route::get('{slug}', [SerumLandingPageController::class, 'viewProduct'])->name('serum.view');
 
 });
 
