@@ -58,7 +58,7 @@ class CODController extends Controller
             $order = new Order();
 
             $maxOrderId               = Order::max('order_id');
-            $order->tracking_number   = 'TRK' . rand(1000, 99999) . now()->format('Ymd') ;
+            $order->tracking_number   = 'TRK' . rand(1000, 99999) . now()->format('Ymd');
             $order->order_id          = $maxOrderId ? $maxOrderId + 1 : 14529937801;
             $order->invoice_id        = 'INV-1737' . rand(100000000, 9999999999);
             $order->user_id           = Auth::check() ? Auth::user()->id : null;

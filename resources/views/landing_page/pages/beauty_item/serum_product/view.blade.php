@@ -6,18 +6,17 @@
 
 @push('add-css')
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ asset('public/backend/assets/css/owl.carousel.min.css') }}">
   <link rel="stylesheet" href="{{ asset('public/backend/assets/css/owl.theme.default.min.css') }}">
-<style>
 
+<style>
   body {
     font-family: "Hind Siliguri", sans-serif;
   }
-
 </style>
 
 @endpush
@@ -27,9 +26,11 @@
 @php
     $useful_lists = json_decode($landingPage->useful_list_name);
     $why_lists    = json_decode($landingPage->why_list_name);
+    $singleProduct = \App\Models\Product::where('id', $landingPage->first_product_id)->first();
+    $secondProduct = \App\Models\Product::where('id', $landingPage->second_product_id)->first();
 @endphp
 
-{{-- Banner Section Start --}}
+{{-- Banner Section Start Done --}}
 <section class="banner_section">
   <div class="container text-center py-5">
      <div class="row">
@@ -44,17 +45,66 @@
 
           <div class="card_products" id="order">
               <div class="card_rows">
-                  <img src="{{ asset('public/landing_page/beauty_product/2-2.jpg') }}" alt="Osufi Badsha Serum">
-                  <h5 class="mt-3">Osufi Badsha Serum<br>Offer Price: 690/- (<del>990</del>)Tk</h5>
-                  <a href="#order" class="btn_custom mt-2">
+                  <img src="{{ asset($singleProduct->thumb_image) }}" alt="{{ $singleProduct->slug }}">
+                  <h5 class="mt-3">{{ $singleProduct->name }}<br>Offer Price: 
+
+                    @if ( checkDiscount($singleProduct) )
+                      @if ( !empty($singleProduct->discount_type === "amount") )
+
+                        {{ $singleProduct->selling_price - $singleProduct->discount_value }}/- <span class="text-danger"><del>({{ $singleProduct->selling_price }})/-</del></span> Tk
+
+                      @elseif( !empty($singleProduct->discount_type === "percent") )
+                        @php
+                            $discount_val = $singleProduct->selling_price * $singleProduct->discount_value / 100;
+                        @endphp
+
+                        {{ $singleProduct->selling_price - $discount_val }}/- <span class="text-danger"><del>({{ $singleProduct->selling_price }})/-</del></span> TK
+
+                      @else
+
+                        {{ $singleProduct->selling_price }}/- TK
+
+                      @endif
+
+                    @else
+                      {{ $singleProduct->selling_price }}/- TK
+                    @endif
+
+                  </h5>
+
+                  <a href="#orders" class="btn_custom mt-2">
                     <svg aria-hidden="true" class="e-font-icon-svg e-far-hand-point-right" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M428.8 137.6h-86.177a115.52 115.52 0 0 0 2.176-22.4c0-47.914-35.072-83.2-92-83.2-45.314 0-57.002 48.537-75.707 78.784-7.735 12.413-16.994 23.317-25.851 33.253l-.131.146-.129.148C135.662 161.807 127.764 168 120.8 168h-2.679c-5.747-4.952-13.536-8-22.12-8H32c-17.673 0-32 12.894-32 28.8v230.4C0 435.106 14.327 448 32 448h64c8.584 0 16.373-3.048 22.12-8h2.679c28.688 0 67.137 40 127.2 40h21.299c62.542 0 98.8-38.658 99.94-91.145 12.482-17.813 18.491-40.785 15.985-62.791A93.148 93.148 0 0 0 393.152 304H428.8c45.435 0 83.2-37.584 83.2-83.2 0-45.099-38.101-83.2-83.2-83.2zm0 118.4h-91.026c12.837 14.669 14.415 42.825-4.95 61.05 11.227 19.646 1.687 45.624-12.925 53.625 6.524 39.128-10.076 61.325-50.6 61.325H248c-45.491 0-77.21-35.913-120-39.676V215.571c25.239-2.964 42.966-21.222 59.075-39.596 11.275-12.65 21.725-25.3 30.799-39.875C232.355 112.712 244.006 80 252.8 80c23.375 0 44 8.8 44 35.2 0 35.2-26.4 53.075-26.4 70.4h158.4c18.425 0 35.2 16.5 35.2 35.2 0 18.975-16.225 35.2-35.2 35.2zM88 384c0 13.255-10.745 24-24 24s-24-10.745-24-24 10.745-24 24-24 24 10.745 24 24z"></path></svg>
                     এখনই অর্ডার করুন</a>
               </div>
 
               <div class="card_rows">
-                  <img src="{{ asset('public/landing_page/beauty_product/4-1-1.jpg') }}" alt="Night Cream Combo">
-                  <h5 class="mt-3">Osufi Badsha Serum with Night Cream & Body Oil<br>Offer Price: 990/- (<del>1290</del>)Tk</h5>
-                  <a href="#order" class="btn_custom mt-2">
+                  <img src="{{ asset($secondProduct->thumb_image) }}" alt="{{ $secondProduct->slug }}">
+                  <h5 class="mt-3">{{ $secondProduct->name }}<br>Offer Price: 
+                    
+                    @if ( checkDiscount($secondProduct) )
+                      @if ( !empty($secondProduct->discount_type === "amount") )
+
+                        {{ $secondProduct->selling_price - $secondProduct->discount_value }}/- <span class="text-danger"><del>({{ $secondProduct->selling_price }})/-</del></span> TK
+
+                      @elseif( !empty($secondProduct->discount_type === "percent") )
+                        @php
+                            $discount_val = $secondProduct->selling_price * $secondProduct->discount_value / 100;
+                        @endphp
+
+                        {{ $secondProduct->selling_price - $discount_val }}/- <span class="text-danger"><del>({{ $secondProduct->selling_price  }})/-</del></span> TK
+
+                      @else
+
+                        {{ $secondProduct->selling_price }}/- TK
+
+                      @endif
+
+                    @else
+                      {{ $secondProduct->selling_price }}/- TK
+                    @endif
+                  </h5>
+
+                  <a href="#orders" class="btn_custom mt-2">
                     <svg aria-hidden="true" class="e-font-icon-svg e-far-hand-point-right" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M428.8 137.6h-86.177a115.52 115.52 0 0 0 2.176-22.4c0-47.914-35.072-83.2-92-83.2-45.314 0-57.002 48.537-75.707 78.784-7.735 12.413-16.994 23.317-25.851 33.253l-.131.146-.129.148C135.662 161.807 127.764 168 120.8 168h-2.679c-5.747-4.952-13.536-8-22.12-8H32c-17.673 0-32 12.894-32 28.8v230.4C0 435.106 14.327 448 32 448h64c8.584 0 16.373-3.048 22.12-8h2.679c28.688 0 67.137 40 127.2 40h21.299c62.542 0 98.8-38.658 99.94-91.145 12.482-17.813 18.491-40.785 15.985-62.791A93.148 93.148 0 0 0 393.152 304H428.8c45.435 0 83.2-37.584 83.2-83.2 0-45.099-38.101-83.2-83.2-83.2zm0 118.4h-91.026c12.837 14.669 14.415 42.825-4.95 61.05 11.227 19.646 1.687 45.624-12.925 53.625 6.524 39.128-10.076 61.325-50.6 61.325H248c-45.491 0-77.21-35.913-120-39.676V215.571c25.239-2.964 42.966-21.222 59.075-39.596 11.275-12.65 21.725-25.3 30.799-39.875C232.355 112.712 244.006 80 252.8 80c23.375 0 44 8.8 44 35.2 0 35.2-26.4 53.075-26.4 70.4h158.4c18.425 0 35.2 16.5 35.2 35.2 0 18.975-16.225 35.2-35.2 35.2zM88 384c0 13.255-10.745 24-24 24s-24-10.745-24-24 10.745-24 24-24 24 10.745 24 24z"></path></svg>
                     এখনই অর্ডার করুন</a>
               </div>
@@ -176,13 +226,14 @@
             <h3 class="mb-3">কম্বো সিলেক্ট করুন</h3>
 
             <div class="product_select_list">
+              {{-- 1st Product Data --}}
               <div class="product_single_list">
-                 <input type="radio" name="" id="" checked>
-                 <img src="{{ asset('public/landing_page/beauty_product/2-2.jpg') }}" alt="">
+                 <input type="checkbox" name="product_id" value="" id="" checked>
+                 <img src="{{ asset($singleProduct->thumb_image) }}" alt="">
 
                   <!-- Title + Quantity -->
                   <div class="product-title-qty">
-                    <span class="product-title">demo × <span>1</span></span>
+                    <span class="product-title">{{ $singleProduct->name }} × <span>1</span></span>
 
                     <div class="wrap_quantity">
                       <div class="quantity">
@@ -192,11 +243,75 @@
                       </div>
 
                       <div class="product-price">
-                        ৳100.00
+                          @if ( checkDiscount($singleProduct) )
+                            @if ( !empty($singleProduct->discount_type === "amount") )
+      
+                              {{ getSetting()->currency_symbol . $singleProduct->selling_price - $singleProduct->discount_value }}/-
+      
+                            @elseif( !empty($singleProduct->discount_type === "percent") )
+                              @php
+                                  $discount_val = $singleProduct->selling_price * $singleProduct->discount_value / 100;
+                              @endphp
+      
+                              {{ getSetting()->currency_symbol . $singleProduct->selling_price - $discount_val }}/-
+      
+                            @else
+      
+                              {{ getSetting()->currency_symbol . $singleProduct->selling_price }}/-
+      
+                            @endif
+      
+                          @else
+                            {{ getSetting()->currency_symbol . $singleProduct->selling_price }}/-
+                          @endif
                       </div>
                     </div>
                   </div>
               </div>
+
+              {{-- 2nd Product Data --}}
+              <div class="product_single_list">
+                <input type="checkbox" name="" id="">
+                <img src="{{ asset($secondProduct->thumb_image) }}" alt="{{ $secondProduct->slug }}">
+
+                 <!-- Title + Quantity -->
+                 <div class="product-title-qty">
+                   <span class="product-title">{{ $secondProduct->name }} × <span>1</span></span>
+
+                   <div class="wrap_quantity">
+                     <div class="quantity">
+                         <button>-</button>
+                         <input type="text" value="1" />
+                         <button>+</button>
+                     </div>
+
+                     <div class="product-price">
+                        @if ( checkDiscount($secondProduct) )
+                          @if ( !empty($secondProduct->discount_type === "amount") )
+
+                            {{ getSetting()->currency_symbol . $secondProduct->selling_price - $secondProduct->discount_value }}/-
+
+                          @elseif( !empty($secondProduct->discount_type === "percent") )
+                            @php
+                                $discount_val = $secondProduct->selling_price * $secondProduct->discount_value / 100;
+                            @endphp
+
+                            {{ getSetting()->currency_symbol . $secondProduct->selling_price - $discount_val }}/-
+
+                          @else
+
+                            {{ getSetting()->currency_symbol . $secondProduct->selling_price }}/-
+
+                          @endif
+
+                        @else
+                          {{ getSetting()->currency_symbol . $secondProduct->selling_price }}/-
+                        @endif
+                     </div>
+                   </div>
+                 </div>
+             </div>
+
             </div>
 
             <div class="row">
