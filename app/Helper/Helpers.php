@@ -52,6 +52,17 @@ if (!function_exists('getSetting')) {
           ->map(fn($word) => strtolower($word)) 
           ->join('.'); // Join with hyphens
   }
+
+  function totalProductQty()
+  {
+    $landingProducts = session('landing_product.default', collect());
+
+    $qty = 0;
+    foreach ($landingProducts as  $product) {
+        $qty += $product['qty'];
+    }
+    return $qty;
+  }
   
 
   //__ Check discount for products __//  
@@ -67,12 +78,40 @@ if (!function_exists('getSetting')) {
       return false;
   }
 
+  function calcProductPrice($product){
+    if ( checkDiscount($product) )
+      if ( !empty($product->discount_type === "amount") ){
+        return $product->selling_price - $product->discount_value;
+      }
+      elseif( !empty($product->discount_type === "percent") ){
+        $discount_val = $product->selling_price * $product->discount_value / 100;
+        return $product->selling_price - $discount_val; 
+      }
+      else{
+        return $product->selling_price;
+      }
+    else{
+      return $product->selling_price;
+    }
+  }
+
 
   function getCartTotal()
   {
     $total = 0;
     foreach (Cart::content() as  $product) {
         $total += ($product->price + ($product->options->size_price ?? 0) + ($product->options->color_price ?? 0)) * $product->qty;
+    }
+    return $total;
+  }
+
+  function landingGetCartTotal()
+  {
+    $landingProducts = session('landing_product.default', collect());
+
+    $total = 0;
+    foreach ($landingProducts as  $product) {
+        $total += ($product['price'] + ($product['options']['size_price'] ?? 0) + ($product['options']['color_price'] ?? 0)) * $product['qty'];
     }
     return $total;
   }
@@ -96,6 +135,19 @@ if (!function_exists('getSetting')) {
       // Add shipping cost if available
       if (Session::has('shippingCost')) {
           $cartTotal += Session::get('shippingCost');
+      }
+
+      return $cartTotal;
+  }
+
+
+  function landingGetMainCartTotal()
+  {
+      $cartTotal = landingGetCartTotal();
+
+      // Add shipping cost if available
+      if (Session::has('landingShippingCost')) {
+          $cartTotal += Session::get('landingShippingCost');
       }
 
       return $cartTotal;

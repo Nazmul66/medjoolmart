@@ -41,7 +41,7 @@ class ShippingRuleController extends Controller
     
             return response()->json([
                 'status'       => true,
-                'message'      => '$' . $shippingCost . ' Delivery charge applied.',
+                'message'      => '$' . $shippingCost . 'Delivery charge applied.',
                 'shippingCost' => $shippingCost,
                 'cartTotal'    => $cartTotal,
             ]);

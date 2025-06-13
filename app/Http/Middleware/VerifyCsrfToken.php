@@ -19,6 +19,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
+        '/clear-landing-session',
         '/pay-via-ajax',
         '/success',
         '/cancel',

@@ -1,3 +1,50 @@
+@php
+    use Illuminate\Support\Collection;
+    use Illuminate\Support\Str;
+
+    $useful_lists = json_decode($landingPage->useful_list_name);
+    $why_lists    = json_decode($landingPage->why_list_name);
+    $singleProduct = \App\Models\Product::where('id', $landingPage->first_product_id)->first();
+    $secondProduct = \App\Models\Product::where('id', $landingPage->second_product_id)->first();
+
+
+$rowId = md5($singleProduct->id . now());
+
+$landingItem = [
+    'rowId' => $rowId,
+    'id'    => $singleProduct->id,
+    'qty'   => 1,
+    'name'  => $singleProduct->name,
+    'price' => calcProductPrice($singleProduct),
+    'weight'=> $singleProduct->weight ?? 0,
+    'options' => [
+        'size_id'         => $singleProduct->size_id ?? null,
+        'size_name'       => $singleProduct->size_name ?? null,
+        'size_price'      => $singleProduct->size_price ?? 0,
+        'color_id'        => $singleProduct->color_id ?? null,
+        'color_name'      => $singleProduct->color_name ?? null,
+        'color_price'     => $singleProduct->color_price ?? 0,
+        'variants_total'  => ($singleProduct->size_price ?? 0) + ($singleProduct->color_price ?? 0),
+        'slug'            => $singleProduct->slug,
+        'units'           => $singleProduct->units ?? 'pcs',
+        'image'           => $singleProduct->thumb_image,
+    ],
+    'taxRate'      => 0,
+    'discountRate' => 0,
+    'instance'     => 'default',
+];
+
+// Merge both into one collection
+$cartCollection = collect([
+    $rowId => $landingItem,
+]);
+
+session()->put('landing_product', [
+    'default' => $cartCollection
+]);
+@endphp
+
+
 @extends('landing_page.layout.master')
 
 @push('meta-title')
@@ -23,12 +70,7 @@
 
 @section('body-content')
 
-@php
-    $useful_lists = json_decode($landingPage->useful_list_name);
-    $why_lists    = json_decode($landingPage->why_list_name);
-    $singleProduct = \App\Models\Product::where('id', $landingPage->first_product_id)->first();
-    $secondProduct = \App\Models\Product::where('id', $landingPage->second_product_id)->first();
-@endphp
+
 
 {{-- Banner Section Start Done --}}
 <section class="banner_section">
@@ -77,7 +119,7 @@
                     এখনই অর্ডার করুন</a>
               </div>
 
-              <div class="card_rows">
+              {{-- <div class="card_rows">
                   <img src="{{ asset($secondProduct->thumb_image) }}" alt="{{ $secondProduct->slug }}">
                   <h5 class="mt-3">{{ $secondProduct->name }}<br>Offer Price: 
                     
@@ -107,7 +149,7 @@
                   <a href="#orders" class="btn_custom mt-2">
                     <svg aria-hidden="true" class="e-font-icon-svg e-far-hand-point-right" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M428.8 137.6h-86.177a115.52 115.52 0 0 0 2.176-22.4c0-47.914-35.072-83.2-92-83.2-45.314 0-57.002 48.537-75.707 78.784-7.735 12.413-16.994 23.317-25.851 33.253l-.131.146-.129.148C135.662 161.807 127.764 168 120.8 168h-2.679c-5.747-4.952-13.536-8-22.12-8H32c-17.673 0-32 12.894-32 28.8v230.4C0 435.106 14.327 448 32 448h64c8.584 0 16.373-3.048 22.12-8h2.679c28.688 0 67.137 40 127.2 40h21.299c62.542 0 98.8-38.658 99.94-91.145 12.482-17.813 18.491-40.785 15.985-62.791A93.148 93.148 0 0 0 393.152 304H428.8c45.435 0 83.2-37.584 83.2-83.2 0-45.099-38.101-83.2-83.2-83.2zm0 118.4h-91.026c12.837 14.669 14.415 42.825-4.95 61.05 11.227 19.646 1.687 45.624-12.925 53.625 6.524 39.128-10.076 61.325-50.6 61.325H248c-45.491 0-77.21-35.913-120-39.676V215.571c25.239-2.964 42.966-21.222 59.075-39.596 11.275-12.65 21.725-25.3 30.799-39.875C232.355 112.712 244.006 80 252.8 80c23.375 0 44 8.8 44 35.2 0 35.2-26.4 53.075-26.4 70.4h158.4c18.425 0 35.2 16.5 35.2 35.2 0 18.975-16.225 35.2-35.2 35.2zM88 384c0 13.255-10.745 24-24 24s-24-10.745-24-24 10.745-24 24-24 24 10.745 24 24z"></path></svg>
                     এখনই অর্ডার করুন</a>
-              </div>
+              </div> --}}
           </div>
      </div>
   </div>
@@ -223,224 +265,220 @@
         <h4 class="text-center mb-4">অর্ডার করতে নিচের তথ্য দিয়ে ফর্মটি পূরণ করুন</h4>
         
         <div class="checkout_form">
-            <h3 class="mb-3">কম্বো সিলেক্ট করুন</h3>
+          <div class="loader_div">
+            <div class="loader"></div>
+          </div>
 
-            <div class="product_select_list">
-              {{-- 1st Product Data --}}
-              <div class="product_single_list">
-                 <input type="checkbox" name="product_id" value="" id="" checked>
-                 <img src="{{ asset($singleProduct->thumb_image) }}" alt="">
+           <div class="form_div">
+              <h3 class="mb-3">কম্বো সিলেক্ট করুন</h3>
 
-                  <!-- Title + Quantity -->
-                  <div class="product-title-qty">
-                    <span class="product-title">{{ $singleProduct->name }} × <span>1</span></span>
+              <div class="product_select_list">
+                {{-- 1st Product Data --}}
+                <div class="product_single_list">
+                  <input type="radio"
+                        class="product-checkbox"
+                        checked
+                    >
+                  <img src="{{ asset($singleProduct->thumb_image) }}" alt="">
 
-                    <div class="wrap_quantity">
-                      <div class="quantity">
-                          <button>-</button>
-                          <input type="text" value="1" />
-                          <button>+</button>
-                      </div>
+                    <!-- Title + Quantity -->
+                    <div class="product-title-qty">
+                      <span class="product-title">{{ $singleProduct->name }} × <span>1</span></span>
 
-                      <div class="product-price">
-                          @if ( checkDiscount($singleProduct) )
-                            @if ( !empty($singleProduct->discount_type === "amount") )
-      
-                              {{ getSetting()->currency_symbol . $singleProduct->selling_price - $singleProduct->discount_value }}/-
-      
-                            @elseif( !empty($singleProduct->discount_type === "percent") )
-                              @php
-                                  $discount_val = $singleProduct->selling_price * $singleProduct->discount_value / 100;
-                              @endphp
-      
-                              {{ getSetting()->currency_symbol . $singleProduct->selling_price - $discount_val }}/-
-      
+                      <div class="wrap_quantity">
+                        <div class="quantity">
+                            <button class="btn_increase">-</button>
+                            <input type="text" class="prdt_qty" value="1" readonly
+                                data-id="{{ $singleProduct->id }}" 
+                                data-rowid="{{ $rowId }}" 
+                            />
+                            <button class="btn_decrease">+</button>
+                        </div>
+
+                        <div class="product-price">
+                            @if ( checkDiscount($singleProduct) )
+                              @if ( !empty($singleProduct->discount_type === "amount") )
+        
+                                {{ getSetting()->currency_symbol . $singleProduct->selling_price - $singleProduct->discount_value }}/-
+        
+                              @elseif( !empty($singleProduct->discount_type === "percent") )
+                                @php
+                                    $discount_val = $singleProduct->selling_price * $singleProduct->discount_value / 100;
+                                @endphp
+        
+                                {{ getSetting()->currency_symbol . $singleProduct->selling_price - $discount_val }}/-
+        
+                              @else
+        
+                                {{ getSetting()->currency_symbol . $singleProduct->selling_price }}/-
+        
+                              @endif
+        
                             @else
-      
                               {{ getSetting()->currency_symbol . $singleProduct->selling_price }}/-
-      
                             @endif
-      
-                          @else
-                            {{ getSetting()->currency_symbol . $singleProduct->selling_price }}/-
-                          @endif
+                        </div>
                       </div>
                     </div>
-                  </div>
+                </div>
               </div>
 
-              {{-- 2nd Product Data --}}
-              <div class="product_single_list">
-                <input type="checkbox" name="" id="">
-                <img src="{{ asset($secondProduct->thumb_image) }}" alt="{{ $secondProduct->slug }}">
+              <form action="{{ route('landing.payment.cod') }}" method="POST">
+                @csrf
 
-                 <!-- Title + Quantity -->
-                 <div class="product-title-qty">
-                   <span class="product-title">{{ $secondProduct->name }} × <span>1</span></span>
-
-                   <div class="wrap_quantity">
-                     <div class="quantity">
-                         <button>-</button>
-                         <input type="text" value="1" />
-                         <button>+</button>
-                     </div>
-
-                     <div class="product-price">
-                        @if ( checkDiscount($secondProduct) )
-                          @if ( !empty($secondProduct->discount_type === "amount") )
-
-                            {{ getSetting()->currency_symbol . $secondProduct->selling_price - $secondProduct->discount_value }}/-
-
-                          @elseif( !empty($secondProduct->discount_type === "percent") )
-                            @php
-                                $discount_val = $secondProduct->selling_price * $secondProduct->discount_value / 100;
-                            @endphp
-
-                            {{ getSetting()->currency_symbol . $secondProduct->selling_price - $discount_val }}/-
-
-                          @else
-
-                            {{ getSetting()->currency_symbol . $secondProduct->selling_price }}/-
-
-                          @endif
-
-                        @else
-                          {{ getSetting()->currency_symbol . $secondProduct->selling_price }}/-
-                        @endif
-                     </div>
-                   </div>
-                 </div>
-             </div>
-
-            </div>
-
-            <div class="row">
-               <div class="col-lg-6">
-                  <div class="billing_address">
-                      <h3 class="mb-4">Billing details</h3>
-
-                      <div class="mb-3">
-                        <label for="name" class="form-label mb-1">আপনার নাম *</label>
-                        <input type="text" class="form-control" id="name" name="name">
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="address" class="form-label mb-1">আপনার সম্পূর্ণ ঠিকানা *</label>
-                        <input type="text" class="form-control" id="address" name="address" placeholder="House Number and Street name">
-                      </div>
-
-                      <div class="lg:mb-5 mb-3">
-                        <label for="phone" class="form-label mb-1">আপনার মোবাইল নাম্বার *</label>
-                        <input type="tel" class="form-control" id="phone" name="phone">
-                      </div>
-
-                      <div class="lg:mb-3 mb-5">
-                        <label for="Shipping" class="form-label mb-1" style="font-size: 22px;">Shipping</label>
-                        <select class="form-select" aria-label="Default select example">
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                        </select>
+                <div class="row">
+                  <div class="col-lg-6">
+                      <div class="billing_address">
+                          <h3 class="mb-4">বিলের বিস্তারিত তথ্য</h3>
+  
+                          <div class="mb-3">
+                            <label for="name" class="form-label mb-1">আপনার নাম <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" name="full_name" value="{{ old('full_name') }}">
+                            <div class="text-danger error-msg" id="name-error" style="display: {{ $errors->has('name') ? 'block' : 'none' }};">
+                              {{ $errors->first('name') ? 'অনুগ্রহ করে আপনার নাম লিখুন' : 'অনুগ্রহ করে আপনার নাম লিখুন' }}
+                            </div>
+                            
+                          </div>
+  
+                          <div class="mb-3">
+                            <label for="address" class="form-label mb-1">আপনার সম্পূর্ণ ঠিকানা <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="address" name="address" value="{{ old('address') }}" >
+                            <div class="text-danger error-msg" id="address-error" style="display:{{ $errors->has('address') ? 'block' : 'none' }};">
+                            {{ $errors->first('name') ? 'ঠিকানা প্রয়োজন' : 'ঠিকানা প্রয়োজন' }}
+                            </div>
+                          </div>
+  
+                          <div class="lg:mb-5 mb-3">
+                            <label for="phone" class="form-label mb-1">আপনার মোবাইল নাম্বার <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" >
+                            <div class="text-danger error-msg" id="phone-error" style="display: {{ $errors->has('phone') ? 'block' : 'none' }};">
+                              {{ $errors->first('name') ? 'মোবাইল নাম্বার প্রয়োজন' : 'মোবাইল নাম্বার প্রয়োজন' }}
+                            </div>
+                          </div>
+  
+                          <div class="lg:mb-3 mb-5">
+                            <label for="Shipping" class="form-label mb-1" style="font-size: 22px;">ডেলিভারি চার্জ</label>
+  
+                            @if ( !empty(getSetting()->inside_city) && !empty(getSetting()->outside_city) )
+                              <select class="form-select" aria-label="Default select example" id="shippingRules" required>
+                                  <option value="{{ getSetting()->inside_city }}" {{ session('shippingCost') == getSetting()->inside_city ? 'selected' : '' }}>ঢাকার ভিতরে ( {{ getSetting()->currency_symbol . getSetting()->inside_city }} )</option>
+                                  <option value="{{ getSetting()->outside_city }}" {{ session('shippingCost') == getSetting()->outside_city ? 'selected' : '' }}>ঢাকার বাইরে ( {{ getSetting()->currency_symbol . getSetting()->outside_city }} )</option>
+                              </select>
+                            @endif
+  
+                          </div>
                       </div>
                   </div>
-               </div>
-
-
-               <div class="col-lg-6">
-                  <div class="order_details">
-                      <h3 class="lg:mb-4 mb-3">Your order</h3>
-
-                      <table class="shop_table">
-                        <thead>
-                          <tr>
-                            <th class="product-name">Product</th>
-                            <th class="product-total">Subtotal</th>
-                          </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                              <td class="product-name">
-                                  <div class="d-flex gap-3 align-items-center justify-content-between">
-                                      <div class="d-flex gap-3 align-items-center">
-                                          <img src="{{ asset('public/landing_page/beauty_product/2-2.jpg') }}" alt="" style="width: 50px; border-radius: 6px;">
-                                          <span class="text-black" style="font-weight: 600">demo</span>
-                                      </div>
-
-                                      <strong>x <span class="qty">1</span></strong>
-                                  </div>
-                              </td>
-
-                              <td class="product-total">
-                                  <strong><span>৳100.00</span></strong>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="product-name">
-                                   Subtotal
-                              </td>
-
-                              <td class="product-total">
-                                  <strong><span>৳100.00</span></strong>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="product-name">
-                                  (+) Shipping
-                              </td>
-
-                              <td class="product-total">
-                                  <strong><span>৳0.00</span></strong>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="product-name">
-                                  <strong>Total</strong>
-                              </td>
-
-                              <td class="product-total">
-                                  <strong><span>৳100.00</span></strong>
-                              </td>
-                            </tr>
-                        </tbody>
-                      </table>
-
-                      <div class="payment_process">
-                        <ul>
-                          <li>
-                            <label style="cursor: pointer;">
-                              <input type="radio" name="checkout" value="cod" checked>
-                                Cash on delivery
-                            </label>
-                            <div class="desc-box active" id="desc-cod">
-                                Pay with cash upon delivery.
+  
+                  <div class="col-lg-6">
+                      <div class="order_details">
+                          <h3 class="lg:mb-4 mb-3">আপনার অর্ডার</h3>
+  
+                          <table class="shop_table">
+                            <thead>
+                              <tr>
+                                <th class="product-name">Product</th>
+                                <th class="product-total">Total</th>
+                              </tr>
+                            </thead>
+  
+                            <tbody id="product-summary">
+  
+                                @foreach ($landingProduct as $item)
+                                {{-- @dd($item['options']['image']); --}}
+                                  <tr>
+                                    <td class="product-name">
+                                        <div class="d-flex gap-3 align-items-center justify-content-between">
+                                            <div class="d-flex gap-3 align-items-center">
+                                                <img src="{{ asset($item['options']['image']) }}" alt="{{ $item['options']['slug'] }}" style="width: 50px; border-radius: 6px;">
+                                                <span class="text-black" style="font-weight: 600">{{ $item['name'] }}</span>
+                                            </div>
+  
+                                            <strong>x <span class="qty">1</span></strong>
+                                        </div>
+                                    </td>
+  
+                                    <td class="product-total">
+                                        <strong><span>
+                                          {{ getSetting()->currency_symbol . number_format($item['price'], 2) }}
+                                        </span></strong>
+                                    </td>
+                                  </tr>
+                                @endforeach
+  
+                                <tr>
+                                  <td class="product-name">
+                                      উপমোট 
+                                  </td>
+  
+                                  <td class="product-total">
+                                    <strong><span class="subtotal">{{ getSetting()->currency_symbol . $totalAmountSum }}</span></strong>
+                                  </td>
+                                </tr>
+  
+                                <tr>
+                                  <td class="product-name">
+                                      (+) ডেলিভারি চার্জ
+                                  </td>
+  
+                                  <td class="product-total">
+                                    <strong>
+                                        <span class="shipping_amount">
+                                          @if ( Session::has('landingShippingCost') && Session::get('landingShippingCost'))
+                                              {{ getSetting()->currency_symbol }}{{ Session::get('landingShippingCost') ?: 0 }}
+                                          @endif
+                                        </span>
+                                    </strong>
+                                  </td>
+                                </tr>
+  
+                                <tr>
+                                  <td class="product-name">
+                                      <strong>মোট</strong>
+                                  </td>
+  
+                                  <td class="product-total">
+                                    <strong><span class="grandtotal">{{ getSetting()->currency_symbol . $finalAmount }}</span></strong>
+                                  </td>
+                                </tr>
+                            </tbody>
+                          </table>
+  
+                          <div class="payment_process">
+                            <ul>
+                              <li>
+                                <label style="cursor: pointer;">
+                                  <input type="radio" name="checkout" value="cod" checked>
+                                    ক্যাশ অন ডেলিভারি
+                                </label>
+                                <div class="desc-box active" id="desc-cod">
+                                    ডেলিভারির সময় নগদ পরিশোধ করুন
+                                </div>
+                              </li>
+  
+                              {{-- <li>
+                                <label  style="cursor: pointer;">
+                                  <input type="radio" name="checkout" value="bkash">
+                                  bKash <img src="{{ asset('public/landing_page/bkash.png') }}" class="payment-logo" alt="bKash logo">
+                                </label>
+                                <div class="desc-box" id="desc-bkash">
+                                    Pay with your bKash account.
+                                </div>
+                              </li> --}}
+                            </ul>
+                          
+                            <div class="privacy-note">
+                              "আপনার ব্যক্তিগত তথ্য এই ওয়েবসাইটে আপনার অর্ডার প্রক্রিয়াকরণ, অভিজ্ঞতা উন্নতকরণ এবং আমাদের গোপনীয়তা নীতিতে বর্ণিত অন্যান্য উদ্দেশ্যে ব্যবহার করা হবে।"
                             </div>
-                          </li>
-
-                          {{-- <li>
-                            <label  style="cursor: pointer;">
-                              <input type="radio" name="checkout" value="bkash">
-                              bKash <img src="{{ asset('public/landing_page/bkash.png') }}" class="payment-logo" alt="bKash logo">
-                            </label>
-                            <div class="desc-box" id="desc-bkash">
-                                Pay with your bKash account.
-                            </div>
-                          </li> --}}
-                        </ul>
-                      
-                        <div class="privacy-note">
-                            Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.
-                        </div>
-                      
-                        <button class="place-order">🛒 Place Order ৳100.00</button>
+                          
+                            <button class="place-order">🛒 অর্ডার করুন <span class="btn_price">{{ getSetting()->currency_symbol . $finalAmount }}</span></button>
+                          </div>
+                          
                       </div>
-                      
                   </div>
-             </div>
-            </div>
+                </div>
+              </form>
+           </div>
         </div>
     </div>
   </div>
@@ -452,6 +490,28 @@
 
 @push('add-js')
 
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'InitiateCheckout',
+      ecommerce:{
+        currency: '{{ getSetting()->currency_name }}',
+        value: '{{ $finalAmount }}',
+        items: [
+          @foreach($landingProduct as $item)
+          {
+            item_id: '{{ $item["id"] }}',
+            item_name: '{{ $item["name"] }}',
+            item_category: '',
+            quantity: '{{ $item["qty"] }}',
+            price: '{{ $item["price"] }}',
+          },
+          @endforeach
+        ]
+      },
+    });
+  </script>
+
   <!-- Jquery JS File -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
@@ -459,6 +519,166 @@
   <script src="{{ asset('public/backend/assets/js/owl.carousel.min.js') }}"></script>
 
   <script>
+    var currency_symbol = "{{ getSetting()->currency_symbol }}";
+    var currency_name   = "{{ getSetting()->currency_name }}";
+
+
+    function productUpdate(){
+      document.addEventListener("DOMContentLoaded", function () {
+        const quantityWrappers = document.querySelectorAll('.wrap_quantity');
+    
+        quantityWrappers.forEach(wrapper => {
+          const minusBtn = wrapper.querySelector('.btn_increase');
+          const plusBtn = wrapper.querySelector('.btn_decrease');
+          const input = wrapper.querySelector('.prdt_qty');
+
+          function updateQtyOnServer(rowId, qty) {
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('update.landing.cart') }}",
+                data: { rowId: rowId, qty: qty }, 
+                beforeSend: function(){
+                   document.querySelector('.form_div').classList.add('active_form');
+                   document.querySelector('.loader_div').style.display = 'block';
+                },
+                success: function (data) {
+                  console.log(data);
+
+                  document.querySelector('.form_div').classList.remove('active_form');
+                  document.querySelector('.loader_div').style.display = 'none';
+
+                  document.querySelector('.qty').innerText = qty;
+                  document.querySelector('.subtotal').innerText = '৳' + data.subtotal;
+                  // document.getElementById('shipping').innerText = '৳' + data.shipping;
+                  document.querySelector('.grandtotal').innerText = '৳' + data.total;
+                  document.querySelector('.btn_price').innerText = '৳' + data.total;
+                },
+                error: function (err) {
+                    console.log(err);
+                    document.querySelector('.form_div').classList.remove('active_form');
+                    // let errors = data.responseJSON?.errors;
+                }
+            });
+          }
+    
+            // Increase Quantity
+            plusBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+              let currentVal = parseInt(input.value);
+              if (!isNaN(currentVal)) {
+                let newQty = currentVal + 1;
+                input.value = newQty;
+                updateQtyOnServer(input.dataset.rowid, newQty);
+              }
+            });
+
+
+            // Decrease Quantity
+            minusBtn.addEventListener('click', function (e) {
+              e.preventDefault();
+              let currentVal = parseInt(input.value);
+              if (isNaN(currentVal) || currentVal <= 1) {
+                input.value = 1;
+                updateQtyOnServer(input.dataset.rowid, 1);
+              } else {
+                let newQty = currentVal - 1;
+                input.value = newQty;
+                updateQtyOnServer(input.dataset.rowid, newQty);
+              }
+            });
+        });
+      });
+    }
+
+    productUpdate();
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const phoneInput = document.getElementById('phone');
+
+      phoneInput.addEventListener('input', function () {
+        // Only allow digits and limit to 11 characters
+        this.value = this.value.replace(/\D/g, '').slice(0, 11);
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const inputs = [
+        { id: 'name', error: 'name-error' },
+        { id: 'address', error: 'address-error' },
+        { id: 'phone', error: 'phone-error' }
+      ];
+
+      inputs.forEach(field => {
+        const inputEl = document.getElementById(field.id);
+        const errorEl = document.getElementById(field.error);
+
+        inputEl.addEventListener('blur', function () {
+          if (inputEl.value.trim() === '') {
+            errorEl.style.display = 'block';
+          } else {
+            errorEl.style.display = 'none';
+          }
+        });
+
+        // Optional: remove error on typing
+        inputEl.addEventListener('input', function () {
+          if (inputEl.value.trim() !== '') {
+            errorEl.style.display = 'none';
+          }
+        });
+      });
+    });
+
+
+      //__ Shipping Rules add __//
+      const $shippingRules = $('#shippingRules');
+
+      function applyShippingRule(selectedValue) {
+          if (selectedValue) {
+              $.ajax({
+                  url: "{{ route('landing.apply.shipping') }}", // Ensure the route exists
+                  type: "POST",
+                  data: {
+                      _token: "{{ csrf_token() }}", // Laravel CSRF token
+                      shippingRule: selectedValue
+                  },
+                  beforeSend: function(){
+                    document.querySelector('.form_div').classList.add('active_form');
+                    document.querySelector('.loader_div').style.display = 'block';
+                  },
+                  success: function (res) {
+                    // console.log(res);
+                      document.querySelector('.form_div').classList.remove('active_form');
+                      document.querySelector('.loader_div').style.display = 'none';
+
+                      if (res.status === true) {
+                          productUpdate();
+                          $('.shipping_amount').text(`${currency_symbol}` + res.landingShippingCost);
+                          toastr.success(res.message);
+
+                          document.querySelector('.subtotal').innerText = '৳' + res.totalAmountSum;
+                          document.querySelector('.grandtotal').innerText = '৳' + res.finalAmount;
+                          document.querySelector('.btn_price').innerText = '৳' + res.finalAmount;
+                      }
+                  },
+                  error: function (xhr, status, error) {
+                      console.log('Error applying shipping rule:', xhr);
+                      // toastr.error(res.message);
+                  }
+              });
+          }
+      }
+
+      // Trigger the AJAX call on page load for the default selected option
+      applyShippingRule($shippingRules.val());
+
+      // Trigger AJAX call on dropdown change
+      $shippingRules.on('change', function () {
+          applyShippingRule($(this).val());
+      });
+
+
       $('#testimonial').owlCarousel({
           loop:true,
           margin:60,
@@ -497,6 +717,10 @@
           descriptions[radio.value].classList.add('active');
         });
       });
+
   </script>
 
 @endpush
+
+
+

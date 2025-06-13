@@ -24,6 +24,7 @@ use App\Http\Controllers\Frontend\WishlistController;
 |--------------------------------------------------------------------------
 |
 */
+Route::middleware('landingPageSession')->group(function(){
 
     Route::controller(HomeController::class)->group(function () {
         Route::get('/', "home")->name('home');
@@ -165,7 +166,7 @@ use App\Http\Controllers\Frontend\WishlistController;
         });
     });
     
-
+});
 
 /*
 |--------------------------------------------------------------------------

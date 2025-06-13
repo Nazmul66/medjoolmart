@@ -8,6 +8,8 @@
 |
 */
 
+use App\Http\Controllers\Admin\LandingCODController;
+use App\Http\Controllers\Admin\LandingShippingRuleController;
 use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\QRCodeController;
 use App\Http\Controllers\Admin\SerumLandingPageController;
@@ -193,7 +195,7 @@ Route::middleware('setLanguage')->group(function(){
         Route::get('/order/{status}', [OrderController::class, 'index'])->name('order.index');
         Route::get('/order-data', [OrderController::class, 'getData'])->name('order-data');
         Route::get('/order/show/{id}', [OrderController::class, 'orderShow'])->name('order.show');
-        Route::get('/order/destroy/{id}', [OrderController::class, 'orderDestroy'])->name('order.destroy');
+        Route::delete('/order/destroy/{id}', [OrderController::class, 'orderDestroy'])->name('order.destroy');
         Route::post('/order/payment-status', [OrderController::class, 'changePaymentStatus'])->name('change.payment.status');
         Route::post('/order/order-status', [OrderController::class, 'changeOrderStatus'])->name('change.order.status');
         Route::get('/order/invoice-pdf/{id}', [OrderController::class, 'order_invoice_pdf'])->name('order.order_invoice_pdf');
@@ -305,12 +307,25 @@ Route::middleware('setLanguage')->group(function(){
         Route::get('/reviewSerum-image-delete/{id}', [SerumLandingPageController::class, 'delete_review_serum_image'])->name('review-serum-image.delete'); 
 
         Route::get('/serum-demo', [SerumLandingPageController::class, 'serum_demo'])->name('serum.demo');
+
     });
 
 
 
-    //_____ Out Of Admin ( Landing Page ) _____//
-    Route::get('{slug}', [SerumLandingPageController::class, 'viewProduct'])->name('serum.view');
+    //__ Shipping Rules  __//
+    Route::controller(LandingShippingRuleController::class)->group(function () {
+        Route::post('/landing-apply-shipping', 'landing_apply_shipping')->name('landing.apply.shipping');
+    });
+
+    //__ Cash On Delivery Payment Gateway __//
+    Route::controller(LandingCODController::class)->group(function () {
+        Route::post('/landing-cod', 'index')->name('landing.payment.cod');
+        Route::get('/landing-success-payment/{order_id}', 'landing_success_payment')->name('landing.payment.success')->middleware('NoBack');
+    });
+
+    //_____ Out Of Admin ( Landing Page ) _____//    
+    Route::post('/update-landing-cart', [SerumLandingPageController::class, 'updateQty'])->name('update.landing.cart');
+    Route::get('landing-page/{slug}', [SerumLandingPageController::class, 'viewProduct'])->name('serum.view');
 
 });
 

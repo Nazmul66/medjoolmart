@@ -40,30 +40,29 @@ class OrderController extends Controller
     public function getData(Request $request)
     {
         // get all data
-        $orders = '';
-            $query = Order::leftJoin('order_products', 'order_products.order_id', 'orders.id')
-                ->leftJoin('transactions', 'transactions.order_id', 'orders.order_id')
-                ->leftJoin('users', 'users.id', 'orders.user_id');
-
-                if( !empty($request->order_status) ){
-                    $query->where('order_status', $request->order_status);
-                }
-
-                if( !empty($request->payment_status) ){
-                    $query->where('payment_status', $request->payment_status);
-                }
-
-                if( !empty($request->date_range) ){
-                    [$start_date, $end_date] = explode(' to ', $request->date_range);
-                    $query->whereBetween('orders.created_at', [$start_date, $end_date]);
-                }
-
-            $orders = $query->select('orders.*', 'order_products.product_name', 'order_products.variants', 'order_products.variant_total', 'order_products.unit_price', 'order_products.qty', 'users.name as cus_name', 'users.email as cus_email', 'users.phone as cus_phone')->get();
+        $orders = Order::orderByDesc('id')
+            ->when($request->order_status, fn($q) => $q->where('order_status', $request->order_status))
+            ->when($request->payment_status, fn($q) => $q->where('payment_status', $request->payment_status))
+            ->when($request->date_range, function ($q) use ($request) {
+                [$start, $end] = explode(' to ', $request->date_range);
+                $q->whereBetween('orders.created_at', [$start, $end]);
+            })
+            ->get();
 
         return DataTables::of($orders)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($order) {
                 return '<input class="form-check-input" type="checkbox" id="formCheck1">';
+            })
+            ->addColumn('cus_name', function ($order) {
+                $order_name = json_decode($order->order_address);
+                $cus_name = $order_name->full_name;
+                return $cus_name;
+            })
+            ->addColumn('cus_phone', function ($order) {
+                $order_phone = json_decode($order->order_address);
+                $cus_phone = '<a href="tel:' . $order_phone->phone . '">' . $order_phone->phone . '</a>';
+                return $cus_phone;
             })
             ->addColumn('order_date', function ($order) {
                 $date = date('F d, Y', strtotime($order->created_at));
@@ -133,7 +132,7 @@ class OrderController extends Controller
                 ', ['order' => $order]);
                 return $actionHtml;
             })
-            ->rawColumns(['checkbox', 'order_date', 'status', 'total_amount', 'product_qty', 'order_status', 'payment_status', 'order_id', 'action'])
+            ->rawColumns(['checkbox', 'cus_name', 'cus_phone', 'order_date', 'status', 'total_amount', 'product_qty', 'order_status', 'payment_status', 'order_id', 'action'])
             ->make(true);
     }
 
@@ -189,8 +188,10 @@ class OrderController extends Controller
         return view('backend.pages.order.order-invoice', compact('order', 'order_products'));
     }
 
-    public function orderDestroy(Order $order)
+    public function orderDestroy($id)
     {
+        $order = Order::findOrFail($id);
+        
         if (!$this->user || !$this->user->can('delete.order')) {
             throw UnauthorizedException::forPermissions(['delete.order']);
         }

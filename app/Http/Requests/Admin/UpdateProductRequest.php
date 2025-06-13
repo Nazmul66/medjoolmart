@@ -31,7 +31,7 @@ class UpdateProductRequest extends FormRequest
             'sku'            => ['required', 'max:155'],
             'category_id'    => ['required', 'numeric'],
             'subCategory_id' => ['numeric'],
-            'brand_id'       => ['required', 'numeric'],
+            'brand_id'       => ['numeric'],
             'purchase_price' => [
                 'required',
                 'numeric',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use App\Models\Product;
 use App\Models\SerumLandingPage;
 use App\Models\SerumReviewImage;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 
 class SerumLandingPageController extends Controller
@@ -160,7 +162,7 @@ class SerumLandingPageController extends Controller
         try {
             $serumLandingPage = new SerumLandingPage();
 
-            $serumLandingPage->slug                = $request->slug;
+            $serumLandingPage->slug                = Str::slug($request->slug);
             $serumLandingPage->header_title        = $request->header_title;
             $serumLandingPage->first_product_id    = $request->first_product_id;
             $serumLandingPage->second_product_id   = $request->second_product_id;
@@ -206,13 +208,30 @@ class SerumLandingPageController extends Controller
      */
     public function viewProduct($slug)
     {
-        // dd($slug);
-        $landingPage = SerumLandingPage::where('slug', $slug)->first();
+        if (session()->has('landing-page') && session('landing-page') ) {
+            session()->forget('landing-page');
+        }
+
+        $landingProduct = session('landing_product.default', collect());
+        // dd($landingProduct);
+
+        $totalAmountSum = 0;
+        foreach($landingProduct as $item){
+            $totalAmountSum += $item['price'] * $item['qty'];
+        }
+
+        $shipping = 0;
+        if (Session::has('landingShippingCost')) {
+            $shipping = Session::get('landingShippingCost');
+        }
+        $finalAmount = $totalAmountSum + $shipping;
+
+        $landingPage = SerumLandingPage::where('slug', $slug)->first();  
         $serumReviewImages = SerumReviewImage::where('serum_lp_id', $landingPage->id)->get();
         if( $landingPage->status == 0 ){
             abort(404);
         }
-        return view('landing_page.pages.beauty_item.serum_product.view', compact('landingPage', 'serumReviewImages'));
+        return view('landing_page.pages.beauty_item.serum_product.view', compact('landingPage', 'serumReviewImages', 'landingProduct', 'totalAmountSum', 'finalAmount'));
     }
 
     /**
@@ -259,9 +278,7 @@ class SerumLandingPageController extends Controller
 
         DB::beginTransaction();
         try {
-
-
-            $serumLandingPage->slug                = $request->slug;
+            $serumLandingPage->slug                = Str::slug($request->slug);
             $serumLandingPage->header_title        = $request->header_title;
             $serumLandingPage->first_product_id    = $request->first_product_id;
             $serumLandingPage->second_product_id   = $request->second_product_id;
@@ -349,5 +366,46 @@ class SerumLandingPageController extends Controller
             Toastr::error('There is something wrong', 'Error', ["positionClass" => "toast-top-right"]);
             return redirect()->back();
         }
+    }
+
+
+    public function updateQty(Request $request)
+    {
+        // dd($request->all());
+        $rowId = $request->input('rowId');
+        $qty = (int) $request->input('qty');
+
+        if ($qty < 1) {
+            return response()->json(['error' => 'Invalid quantity'], 400);
+        }
+
+        $landingProduct = session('landing_product.default', collect());
+
+        if (!$landingProduct->has($rowId)) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        // Update quantity
+        $product = $landingProduct->get($rowId);
+        $product['qty'] = $qty;
+
+        $landingProduct->put($rowId, $product);
+        session()->put('landing_product.default', $landingProduct);
+
+        // Calculate totals
+        $subtotal = $landingProduct->sum(function ($item) {
+            return ($item['price'] + $item['options']['variants_total']) * $item['qty'];
+        });
+
+        $shipping = 0; // Example: static or based on logic
+         if (Session::has('landingShippingCost')) {
+            $shipping = Session::get('landingShippingCost');
+        }
+        $total = $subtotal + $shipping;
+
+        return response()->json([
+            'subtotal' => number_format($subtotal, 2),
+            'total' => number_format($total, 2)
+        ]);
     }
 }

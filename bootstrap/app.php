@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'RedirectToCheckout' => \App\Http\Middleware\RedirectToCheckout::class,
             'NoBack' => \App\Http\Middleware\NobackMiddleware::class,
             'setLanguage' => \App\Http\Middleware\SetLanguage::class,
+            'landingPageSession' => \App\Http\Middleware\LandingPageSession::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,

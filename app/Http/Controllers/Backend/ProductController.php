@@ -96,6 +96,7 @@ class ProductController extends Controller
                     }
 
             $products = $query->select('products.*', 'categories.category_name as cat_name', 'subcategories.subcategory_name as subCat_name', 'child_categories.name as childCat_name', 'brands.brand_name')
+                    ->orderBy('products.id', "DESC")
                     ->get();
 
         return DataTables::of($products)

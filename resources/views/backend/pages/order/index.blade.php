@@ -87,6 +87,7 @@
                                 </th>
                                 <th>Order Id</th>
                                 <th>Customer Name</th>
+                                <th>Customer Phone</th>
                                 <th>Product Quantity</th>
                                 <th>Total Amount</th>
                                 <th>Payment Method</th>
@@ -159,6 +160,9 @@
                     },
                     {
                         data: 'cus_name',
+                    },
+                    {
+                        data: 'cus_phone',
                     },
                     {
                         data: 'product_qty',
@@ -353,6 +357,32 @@
             $('.submitable').on('change', function(e){
                 $('.datatables').DataTable().ajax.reload();
             })
+            
         })
     </script>
+
+    {{-- Pusher Js Start --}}
+    <script>
+
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('29983ad499efd408200f', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            // alert(JSON.stringify(data.message));
+            console.log(JSON.stringify(data));
+            if( data ){
+                $('.datatables').DataTable().ajax.reload(null, false);
+                toastr.success(data.message);
+            }
+            else{
+                toastr.error("there is something wrong");
+            }
+        });
+    </script>
+    {{-- Pusher Js End --}}
 @endpush
