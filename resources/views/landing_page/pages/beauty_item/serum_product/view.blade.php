@@ -487,10 +487,14 @@ session()->put('landing_product', [
 
 @endsection
 
-
+@php
+    $andingProduct = @json(session('landing_product.default', collect()));
+@endphp
 @push('add-js')
-
+ 
   <script>
+
+
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: 'InitiateCheckout',

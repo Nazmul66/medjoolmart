@@ -57,7 +57,7 @@ class NewsletterController extends Controller
             Mail::to($subscriber->email)->send(new SubscriptionVerification($subscriber));
 
             //Event
-            broadcast(new SubscriptionEvent('New User Subscription', $subscriber));
+            // broadcast(new SubscriptionEvent('New User Subscription', $subscriber));
 
             return response(['status' => 'success', 'message' => 'A verification link send to your email please check.']);
         }

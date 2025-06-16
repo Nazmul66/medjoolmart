@@ -132,7 +132,7 @@ class CODController extends Controller
             session()->put("order_confirmed_$order->order_id", true);
 
             //Event
-            broadcast(new OrderEvent('New Order Placed'));
+            // broadcast(new OrderEvent('New Order Placed'));
 
             Toastr::success('Order Successfully done', 'Success', ["positionClass" => "toast-top-right"]);
             return redirect()->route('payment.success', ['order_id' => $order->order_id]);

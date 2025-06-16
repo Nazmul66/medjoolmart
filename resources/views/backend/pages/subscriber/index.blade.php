@@ -206,7 +206,7 @@
 
 
     {{-- Pusher Js Start --}}
-        <script>
+        {{-- <script>
 
             // Enable pusher logging - don't include this in production
             Pusher.logToConsole = true;
@@ -227,7 +227,7 @@
                     toastr.error("there is something wrong");
                 }
             });
-        </script>
+        </script> --}}
     {{-- Pusher Js End --}}
 @endpush
 

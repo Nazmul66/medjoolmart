@@ -1,4 +1,4 @@
-<meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8" />
     <title>
           @stack('meta-title') | {{ config('app.name') }} 
@@ -26,4 +26,6 @@
     <link rel="stylesheet" href="{{ asset('public/landing_page/style.css') }}">
 
 @stack('add-css')
+
+{!! getSetting()->facebook_pixel ?? "" !!}
 
